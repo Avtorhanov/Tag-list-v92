@@ -4,7 +4,7 @@
 
 ### Возможности
 
-- Адрес https://avtorhanov.github.io/Tag-list-v76/
+- Адрес https://avtorhanov.github.io/Tag-list-v92/
 
 - 📋 Создание и редактирование списков тегов.
 - 📷 Добавление тегов из фотографии через OCR.
