@@ -397,15 +397,15 @@ h1.editing{background:#fff;border:1px dashed var(--accent);border-radius:10px;pa
              transform var(--ui-motion) var(--ui-ease),margin-top var(--ui-motion) var(--ui-ease);
 }
 
-.taskEditorWrap.open{max-height:calc(3 * 1.35em + 20px);opacity:1;transform:translateY(0);margin-top:5px;pointer-events:auto}
-.taskEditorWrap.editing{max-height:220px}
+.taskEditorWrap.open{max-height:calc(3 * 1.35em + 20px);opacity:1;transform:translateY(0);margin-top:5px;pointer-events:auto;overflow:visible}
+.taskEditorWrap.editing{max-height:min(42dvh,240px);overflow:visible}
 .taskEditorWrap.editing .taskBox textarea{min-height:96px;max-height:min(42dvh,220px)}
 
-.taskBox{padding:0;background:transparent;border:0;border-radius:10px;width:100%;max-width:100%;box-sizing:border-box;overflow:hidden}
+.taskBox{padding:0;background:transparent;border:0;border-radius:10px;width:100%;max-width:100%;box-sizing:border-box;overflow:visible}
 
 .taskBox textarea{
-  display:block;width:100%;min-width:0;box-sizing:border-box;min-height:50px;max-height:125px;resize:none;overflow-y:auto;-webkit-overflow-scrolling:touch;
-  border:1px solid #cfd7e3;border-radius:10px;padding:9px 10px;background:#fff;overflow:hidden;
+  display:block;width:100%;min-width:0;box-sizing:border-box;min-height:50px;max-height:125px;resize:vertical;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;
+  border:1px solid #cfd7e3;border-radius:10px;padding:9px 10px;background:#fff;
   outline:none;box-shadow:none;font:inherit;font-size:calc(15px * var(--fontScale));
   line-height:1.35;-webkit-appearance:none;appearance:none;
 }
