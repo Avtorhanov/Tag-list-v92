@@ -571,10 +571,12 @@ function autosizeTaskTextarea(ta,maxPx){
   const line=parseFloat(cs.lineHeight)||20;
   const min=Math.max(50,line+18);
   const max=maxPx||125;
+  const previousScrollTop=ta.scrollTop;
   ta.style.height="auto";
   const desired=Math.min(max,Math.max(min,ta.scrollHeight));
   ta.style.height=desired+"px";
-  ta.scrollTop=0;
+  // Resizing must not jump the text back to the beginning while the user scrolls.
+  ta.scrollTop=previousScrollTop;
 }
 
 function setTaskEditor(row,item,open,focus=false){
@@ -1054,15 +1056,15 @@ async function shareCurrentStateJson(){
   try{
     const file=typeof File==="function"?new File([text],fileName,{type:"application/json"}):null;
     if(file && typeof navigator.share==="function"){
-      let supportsFiles=false;
-      try{supportsFiles=typeof navigator.canShare==="function"&&navigator.canShare({files:[file]});}catch(_){supportsFiles=false;}
-      if(supportsFiles){
+      // Try the actual JSON File first. Do not gate on canShare(): on some
+      // Android WebViews it is absent or reports false despite native support.
+      try{
         await navigator.share({title:`${docTitle} — состояние`,text:`Состояние приложения «${docTitle}»`,files:[file]});
         showToast("JSON передан");return;
+      }catch(shareError){
+        if(shareError?.name==="AbortError") return;
+        // A real share failure falls through to a safe fallback below.
       }
-      // Some mobile browsers support Web Share for text but reject file shares.
-      await navigator.share({title:fileName,text});
-      showToast("JSON передан как текст");return;
     }
     if(navigator.clipboard?.writeText){
       await navigator.clipboard.writeText(text);
@@ -2169,7 +2171,8 @@ list.addEventListener("click",e=>{
     const isEditing=editor?.classList.contains("editing");
     if(!isOpen) setTaskEditor(row,item,true,false);
     else if(!isEditing) setTaskEditor(row,item,true,true);
-    else setTaskEditor(row,item,false,false);
+    // When editing, tapping the task control again must not collapse the editor.
+    // Use the explicit Save button to finish editing and close the field.
     return;
   }
   const taskSave=e.target.closest(".taskSave");
